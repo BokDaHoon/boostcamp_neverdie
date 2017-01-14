@@ -3,9 +3,13 @@ package com.example.daisy.simplememo;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -20,7 +24,11 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy. MM. dd");
+        String currentTime = simpleDateFormat.format(date).toString();
         assertEquals("com.example.daisy.simplememo", appContext.getPackageName());
+       Log.d("daisy",currentTime);
     }
 }
