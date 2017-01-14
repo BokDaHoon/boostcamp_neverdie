@@ -1,0 +1,52 @@
+package com.example.daisy.simplememo;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.example.daisy.simplememo.data.DBHelper;
+import com.example.daisy.simplememo.data.Memo;
+
+public class DetailMemoActivity extends AppCompatActivity {
+    private DBHelper mDbHelper;
+    private EditText mMemoDetailEditText;
+    private Button mModifyMemoButton;
+    private Button mDeleteMemoButton;
+    private Memo mMemo;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail_memo);
+
+        mDbHelper= new DBHelper(DetailMemoActivity.this);
+        int memoId= this.getIntent().getExtras().getInt("memoId");
+        mMemo =  mDbHelper.getMemoDetail(memoId);
+
+        mMemoDetailEditText = (EditText) findViewById(R.id.et_memo_detail);
+        mMemoDetailEditText.setText(mMemo.getContent());
+
+        mModifyMemoButton = (Button) findViewById(R.id.btn_modify_memo);
+        mModifyMemoButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View view) {
+                String newMemo =  mMemoDetailEditText.getText().toString();
+                mMemo.setContent(newMemo);
+                mDbHelper.modifyMemo(mMemo);
+                Toast.makeText(DetailMemoActivity.this, "modify memo" , Toast.LENGTH_SHORT);
+            }
+        });
+        mDeleteMemoButton = (Button) findViewById(R.id.btn_delete_memo);
+        mDeleteMemoButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View view) {
+                mDbHelper.deleteMemo(mMemo);
+                Toast.makeText(DetailMemoActivity.this, "delete memo" , Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+
+
+}
