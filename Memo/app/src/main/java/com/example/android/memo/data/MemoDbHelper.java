@@ -77,7 +77,7 @@ public class MemoDbHelper extends SQLiteOpenHelper {
         );
     }
 
-    public int updateMemo(long id, ContentValues cv){
+    public boolean updateMemo(long id, ContentValues cv){
         String selection = MemoContract.MemoEntry._ID + "=?";
         String[] selectionArg = new String[] {String.valueOf(id)};
         return getWritableDatabase().update(
@@ -85,7 +85,7 @@ public class MemoDbHelper extends SQLiteOpenHelper {
                 cv,
                 selection,
                 selectionArg
-        );
+        )>0;
     }
 
     public int deleteMemo(long id){

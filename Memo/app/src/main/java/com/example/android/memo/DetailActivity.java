@@ -70,10 +70,9 @@ public class DetailActivity extends AppCompatActivity {
         ContentValues cv = new ContentValues();
         String memoText = mMemoEdit.getText().toString();
         cv.put(MemoContract.MemoEntry.COLUMN_CONTENTS, memoText);
-        if(mDbHelper.updateMemo(id, cv) <= 0){
-            return;
+        if(mDbHelper.updateMemo(id, cv)){
+            finish();
         }
-        finish();
     }
 
     @Override
