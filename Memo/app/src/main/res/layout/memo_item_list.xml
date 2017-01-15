@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
         android:fontFamily="monospace"
-        android:textSize="42sp"
+        android:textSize="20sp"
         tools:text="#42" />
 
     <TextView
@@ -26,5 +26,8 @@
         android:layout_marginLeft="16dp"
         android:fontFamily="monospace"
         android:textColor="#000"
-        tools:text="ViewHolder Memo Contents" />
+        tools:text="ViewHolder Memo Contents"
+        android:textSize="20sp"
+        android:maxLines="1"
+        />
 </RelativeLayout>
