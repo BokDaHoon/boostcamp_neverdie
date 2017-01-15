@@ -15,8 +15,8 @@
         android:id="@+id/et_memo"
         android:inputType="textMultiLine"
         android:scrollbars="vertical"
+        android:gravity="top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
