@@ -43,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.query(MemoDBContract.MemoDBEntry.TABLE_NAME,
                 new String[] {MemoDBContract.MemoDBEntry.COLUMN_ID,MemoDBContract.MemoDBEntry.COLUMN_CONTENT, MemoDBContract.MemoDBEntry.COLUMN_TIMESTAMP },
                 null, null, null, null,
-                MemoDBContract.MemoDBEntry.COLUMN_TIMESTAMP + " DESC ");
+                MemoDBContract.MemoDBEntry.COLUMN_ID + " DESC");
     }
 
     /**

@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">SimpleMemo</string>
     <string name="action_settings">Settings</string>
+    <string name="action_save_memo">저장</string>
     <string name="add_memo_title">Add Memo</string>
     <string name="detail_memo_title">Detail Memo</string>
+    <string name="btn_modify_memo">수정</string>
+    <string name="btn_delete_memo">삭제</string>
 </resources>

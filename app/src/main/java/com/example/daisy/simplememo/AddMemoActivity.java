@@ -1,12 +1,14 @@
 package com.example.daisy.simplememo;
 
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.daisy.simplememo.data.DBHelper;
 import com.example.daisy.simplememo.data.Memo;
@@ -26,18 +28,13 @@ public class AddMemoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_memo);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         mDbHelper = new DBHelper(AddMemoActivity.this);
         mMemoContentEditText = (EditText) findViewById(R.id.et_memo_content);
-        mAddMemoButton = (Button) findViewById(R.id.btn_add_memo);
-        mAddMemoButton.setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View view){
-                addToWaitlist(view);
-                // returns back to MainActivity
-                finish();
-            }
-        });
     }
-    private void addToWaitlist(View view) {
+    private void addToMemoList() {
         if (mMemoContentEditText.getText().length() == 0 ) {
             return;
         }
@@ -49,9 +46,25 @@ public class AddMemoActivity extends AppCompatActivity {
 
         mMemo = new Memo(mMemoContentEditText.getText().toString(), currentTime);
         mDbHelper.addNewMemo(mMemo);
-
-        //clear UI text fields
-        //mMemoContentEditText.clearFocus();
-        //mMemoContentEditText.getText().clear();
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_memo, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_save_memo:
+                addToMemoList();
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
