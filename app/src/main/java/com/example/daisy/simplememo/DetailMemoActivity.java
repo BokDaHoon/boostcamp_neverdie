@@ -11,12 +11,16 @@ import android.widget.EditText;
 import com.example.daisy.simplememo.data.DBHelper;
 import com.example.daisy.simplememo.data.Memo;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class DetailMemoActivity extends AppCompatActivity {
     private DBHelper mDbHelper;
-    private EditText mMemoDetailEditText;
-    private Button mModifyMemoButton;
-    private Button mDeleteMemoButton;
     private Memo mMemo;
+
+    @BindView(R.id.et_memo_detail)
+    EditText mMemoDetailEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,35 +30,32 @@ public class DetailMemoActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        mDbHelper= new DBHelper(DetailMemoActivity.this);
-        int memoId= this.getIntent().getExtras().getInt("memoId"); // from MemoAdapter
-        mMemo =  mDbHelper.getMemoDetail(memoId);
+        ButterKnife.bind(this);
 
-        mMemoDetailEditText = (EditText) findViewById(R.id.et_memo_detail);
+        mDbHelper = new DBHelper(DetailMemoActivity.this);
+        int memoId = this.getIntent().getExtras().getInt("memoId"); // from MemoAdapter
+        mMemo = mDbHelper.getMemoDetail(memoId);
         mMemoDetailEditText.setText(mMemo.getContent());
-
-        //Button for Modify
-        mModifyMemoButton = (Button) findViewById(R.id.btn_modify_memo);
-        mModifyMemoButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
-                String newMemo =  mMemoDetailEditText.getText().toString();
-                mMemo.setContent(newMemo);
-                mDbHelper.modifyMemo(mMemo);
-                finish();
-            }
-        });
-        //Button for Delete
-        mDeleteMemoButton = (Button) findViewById(R.id.btn_delete_memo);
-        mDeleteMemoButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
-                mDbHelper.deleteMemo(mMemo);
-                finish();
-            }
-        });
     }
+
+    @OnClick(R.id.btn_modify_memo)
+    public void modifyMemo() {
+        String newMemo = mMemoDetailEditText.getText().toString();
+        mMemo.setContent(newMemo);
+        mDbHelper.modifyMemo(mMemo);
+        finish();
+    }
+
+    @OnClick(R.id.btn_delete_memo)
+    public void deleteMemo() {
+        mDbHelper.deleteMemo(mMemo);
+        finish();
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;

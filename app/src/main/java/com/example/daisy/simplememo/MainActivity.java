@@ -14,15 +14,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.daisy.simplememo.data.DBHelper;
 
-public class MainActivity extends AppCompatActivity implements MemoAdapter.ListItemClickListener , LoaderManager.LoaderCallbacks<Cursor>{
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class MainActivity extends AppCompatActivity implements MemoAdapter.ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private MemoAdapter mAdapter;
-    private RecyclerView mMemoList;
     private DBHelper mDbHelper;
 
+    @BindView(R.id.rv_memo)
+    RecyclerView mMemoList;
+    @BindView(R.id.tv_empty_memolist_msg)
+    TextView mEmptyListTextView;
+
     private static final int TASK_LOADER_ID = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,32 +41,24 @@ public class MainActivity extends AppCompatActivity implements MemoAdapter.ListI
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ButterKnife.bind(this);
+
         mDbHelper = new DBHelper(this);
-        mMemoList = (RecyclerView) findViewById(R.id.rv_memo);
         mMemoList.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MemoAdapter(this, this);
         mMemoList.setAdapter(mAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent startAddMemoIntent = new Intent(MainActivity.this, AddMemoActivity.class);
-                startActivity(startAddMemoIntent);
-            }
-        });
         getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    @OnClick(R.id.fab)
+    public void startAddMemo() {
+        Intent startAddMemoIntent = new Intent(MainActivity.this, AddMemoActivity.class);
+        startActivity(startAddMemoIntent);
     }
 
     @Override
-    public void onListItemClick(int clickedItemIndex , int clickedMemoId) {
+    public void onListItemClick(int clickedItemIndex, int clickedMemoId) {
         Intent startDetailMemoActivity = new Intent(MainActivity.this, DetailMemoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("memoId", clickedMemoId);
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements MemoAdapter.ListI
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new AsyncTaskLoader<Cursor>(this) {
             Cursor mTaskData = null;
+
             @Override
             protected void onStartLoading() {
                 if (mTaskData != null) {
@@ -75,15 +79,17 @@ public class MainActivity extends AppCompatActivity implements MemoAdapter.ListI
                     forceLoad();
                 }
             }
+
             @Override
             public Cursor loadInBackground() {
                 try {
-                    return  mDbHelper.getAllMemos();
+                    return mDbHelper.getAllMemos();
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
                 }
             }
+
             public void deliverResult(Cursor data) {
                 mTaskData = data;
                 super.deliverResult(data);
@@ -93,13 +99,21 @@ public class MainActivity extends AppCompatActivity implements MemoAdapter.ListI
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
+        if (data.getCount() == 0) {
+            mEmptyListTextView.setVisibility(View.VISIBLE);
+            mEmptyListTextView.setText(R.string.empty_memo_list_information);
+            mAdapter.swapCursor(data);
+        } else {
+            mEmptyListTextView.setVisibility(View.GONE);
+            mAdapter.swapCursor(data);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();

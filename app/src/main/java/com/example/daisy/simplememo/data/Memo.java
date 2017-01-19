@@ -9,16 +9,19 @@ public class Memo {
     String content;
     String timestamp;
 
-    public Memo(){
+    public Memo() {
 
     }
+
     public Memo(int _id) {
         this._id = _id;
     }
+
     public Memo(String content, String timestamp) {
         this.content = content;
         this.timestamp = timestamp;
     }
+
     public Memo(int _id, String content, String timestamp) {
         this._id = _id;
         this.content = content;

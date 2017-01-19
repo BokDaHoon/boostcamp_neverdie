@@ -13,8 +13,14 @@
     tools:context="com.example.daisy.simplememo.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/tv_empty_memolist_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|center_horizontal"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_memo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"/>
 </RelativeLayout>

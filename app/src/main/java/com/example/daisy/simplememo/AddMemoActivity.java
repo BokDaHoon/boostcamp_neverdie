@@ -16,11 +16,14 @@ import com.example.daisy.simplememo.data.Memo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class AddMemoActivity extends AppCompatActivity {
-    //private SQLiteDatabase mDb;
+    @BindView(R.id.et_memo_content)
+    EditText mMemoContentEditText;
+
     private DBHelper mDbHelper;
-    private EditText mMemoContentEditText;
-    private Button mAddMemoButton;
     private Memo mMemo;
 
     @Override
@@ -30,12 +33,12 @@ public class AddMemoActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        ButterKnife.bind(this);
         mDbHelper = new DBHelper(AddMemoActivity.this);
-        mMemoContentEditText = (EditText) findViewById(R.id.et_memo_content);
     }
+
     private void addToMemoList() {
-        if (mMemoContentEditText.getText().length() == 0 ) {
+        if (mMemoContentEditText.getText().length() == 0) {
             return;
         }
 
@@ -47,15 +50,17 @@ public class AddMemoActivity extends AppCompatActivity {
         mMemo = new Memo(mMemoContentEditText.getText().toString(), currentTime);
         mDbHelper.addNewMemo(mMemo);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_add_memo, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;

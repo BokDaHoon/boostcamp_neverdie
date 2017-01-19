@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.example.daisy.simplememo.data.MemoDBContract;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Daisy on 2017-01-14.
  */
@@ -17,28 +20,28 @@ import com.example.daisy.simplememo.data.MemoDBContract;
 public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.MemoViewHolder> {
 
     final private ListItemClickListener mOnClickListener;
-    private int mMemoItmes;
-
     private Cursor mCursor;
-    private Context  mContext;
+    private Context mContext;
 
-    public interface ListItemClickListener{
-        void onListItemClick(int clickedItemIndex , int memoId);
+    public interface ListItemClickListener {
+        void onListItemClick(int clickedItemIndex, int memoId);
     }
-    public MemoAdapter(Context context, ListItemClickListener listener){
+
+    public MemoAdapter(Context context, ListItemClickListener listener) {
         mContext = context;
         mOnClickListener = listener;
     }
+
     @Override
     public MemoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.memo_list_item , parent, false);
+        View view = inflater.inflate(R.layout.memo_list_item, parent, false);
         return new MemoViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MemoViewHolder holder, int position) {
-        if(!mCursor.moveToPosition(position)){
+        if (!mCursor.moveToPosition(position)) {
             return;
         }
         int memoId = mCursor.getInt(mCursor.getColumnIndex(MemoDBContract.MemoDBEntry.COLUMN_ID));
@@ -52,7 +55,7 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.MemoViewHolder
 
     @Override
     public int getItemCount() {
-        if(mCursor ==null){
+        if (mCursor == null) {
             return 0;
         }
         return mCursor.getCount();
@@ -70,21 +73,23 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.MemoViewHolder
         return currentCursor;
     }
 
-    class MemoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MemoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.tv_memo_id)
         TextView memoIdTextView;
+        @BindView(R.id.tv_memo_timestamp)
         TextView memoTimeStampTextView;
+        @BindView(R.id.tv_memo_content)
         TextView memoContentTextView;
 
-        public MemoViewHolder(View view){
+        public MemoViewHolder(View view) {
             super(view);
-            memoIdTextView = (TextView)view.findViewById(R.id.tv_memo_id);
-            memoTimeStampTextView = (TextView)view.findViewById(R.id.tv_memo_timestamp);
-            memoContentTextView = (TextView)view.findViewById(R.id.tv_memo_content);
+            ButterKnife.bind(this, view);
             view.setOnClickListener(this);
         }
+
         @Override
         public void onClick(View view) {
-            int clickedPosition= getAdapterPosition();
+            int clickedPosition = getAdapterPosition();
             int clickedMemoId = Integer.parseInt(memoIdTextView.getText().toString());
             mOnClickListener.onListItemClick(clickedPosition, clickedMemoId);
         }
